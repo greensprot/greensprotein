@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart | Greens & Protein</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fefdfb;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    h2 {
+      color: #2e6b30;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 8px 16px;
+      background-color: #2e6b30;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-remove {
+      background-color: #e74c3c;
+      margin-left: 10px;
+    }
+    input[type="number"], select, input[type="text"] {
+      padding: 8px;
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .cart-item {
+      margin-bottom: 12px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    .cart-item span {
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .thankyou {
+      display: none;
+      text-align: center;
+      padding-top: 30px;
+    }
+  </style>
+</head>
+<script src="scripts.js"></script>
+<body>
+
+  <section id="cart-section">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <p id="cart-total">Total: ₹0 | 0g Protein</p>
+
+    <label>Promo Code:
+      <input type="text" id="promo" placeholder="Enter code (fit10, green15)">
+    </label>
+
+    <label>Delivery Slot:
+      <select id="slot">
+        <option>7AM - 8AM</option>
+        <option>8AM - 9AM</option>
+        <option>12PM - 1PM</option>
+        <option>6PM - 7PM</option>
+        <option>7PM - 8PM</option>
+        <option>8PM - 9PM</option>
+      </select>
+    </label>
+
+    <button class="btn" onclick="checkout()">Checkout</button>
+  </section>
+
+  <section class="thankyou" id="thankyou">
+    <h2>Thank You!</h2>
+    <p>Your order has been placed. We'll deliver your bowl soon!</p>
+  </section>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function updateCart() {
+      const container = document.getElementById('cart-items');
+      container.innerHTML = '';
+      let total = 0, totalProtein = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price * item.qty;
+        totalProtein += item.protein * item.qty;
+
+        container.innerHTML += `
+          <div class="cart-item">
+            <span><strong>${item.name}</strong></span><br>
+            <span>₹${item.price} x 
+              <input type="number" value="${item.qty}" min="1" style="width:60px;" onchange="changeQty(${index}, this.value)">
+            </span>
+            <button class="btn btn-remove" onclick="removeItem(${index})">Remove</button>
+          </div>
+        `;
+      });
+
+      document.getElementById('cart-total').innerText = `Total: ₹${total} | ${totalProtein}g Protein`;
+      saveCart();
+    }
+
+    function changeQty(index, qty) {
+      qty = parseInt(qty);
+      if (qty < 1) return;
+      cart[index].qty = qty;
+      updateCart();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function checkout() {
+      let promo = document.getElementById('promo').value.trim().toLowerCase();
+      let discount = 0;
+      if (promo === 'fit10') discount = 0.10;
+      else if (promo === 'green15') discount = 0.15;
+
+      let total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      let finalTotal = total - total * discount;
+      let slot = document.getElementById('slot').value;
+
+      alert(`Order Confirmed! Total after discount: ₹${finalTotal.toFixed(2)}. Delivery Slot: ${slot}`);
+
+      localStorage.removeItem('cart');
+      cart = [];
+
+      document.getElementById('cart-section').style.display = 'none';
+      document.getElementById('thankyou').style.display = 'block';
+    }
+
+    // Initialize with default data if cart is empty (for testing/demo)
+    if (cart.length === 0) {
+      cart = [
+        { name: "20g Paneer Bowl", price: 90, protein: 20, qty: 1 },
+        { name: "25g Custom Bowl with Sprouts & Mint", price: 110, protein: 25, qty: 1 }
+      ];
+      saveCart();
+    }
+
+    updateCart();
+  </script>
+
+</body>
+</html>
