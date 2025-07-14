@@ -1,0 +1,130 @@
+/* File: style.css */
+
+/* RESET + BASE */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #fefdfb;
+  color: #333;
+  line-height: 1.6;
+  padding-bottom: 60px;
+}
+
+/* HEADER */
+header {
+  background-color: #2e6b30;
+  color: white;
+  text-align: center;
+  padding: 30px 20px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+/* SECTIONS */
+.section, .faq-section, .interest-form, .delivery-map {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+h2 {
+  color: #2e6b30;
+  margin-top: 30px;
+  font-size: 1.6rem;
+}
+
+p, ul {
+  margin: 12px 0;
+}
+
+ul {
+  margin-left: 20px;
+}
+
+/* BUTTONS */
+.btn, .whatsapp-cta {
+  background-color: #2e6b30;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover, .whatsapp-cta:hover {
+  background-color: #245327;
+}
+
+/* FAQ */
+.faq-item {
+  border-bottom: 1px solid #ddd;
+  padding: 20px 0;
+  cursor: pointer;
+}
+
+.faq-question {
+  font-weight: 600;
+  color: #2e6b30;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.faq-question::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  font-weight: bold;
+  transition: transform 0.3s;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+.faq-item.active .faq-question::after {
+  content: '−';
+}
+
+.faq-answer {
+  display: none;
+  padding-top: 10px;
+  color: #444;
+  transition: all 0.3s ease;
+}
+
+/* FOOTER */
+footer {
+  background: #2e6b30;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  margin-top: 40px;
+}
+
+/* WHATSAPP */
+.whatsapp-cta {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25d366;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 999;
+}
+
+.whatsapp-cta span {
+  margin-left: 8px;
+}
